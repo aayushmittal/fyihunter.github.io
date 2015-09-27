@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Report event</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
+
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:50%; }
+
+  
+.ui-button {
+  background:#3887BE;
+  color:#FFF;
+  display:block;
+  position:absolute;
+  top:50%;left:50%;
+  width:160px;
+  margin:-20px 0 0 -80px;
+  z-index:100;
+  text-align:center;
+  padding:10px;
+  border:1px solid rgba(0,0,0,0.4);
+  border-radius:3px;
+  }
+  .ui-button:hover {
+    background:#3074a4;
+    color:#fff;
+    }
+    .hide{
+      visibility: hidden;
+    }
+</style>
+
+
+</head>
+<body>
+
+
+<div id='map'>
+  <!--<a href='#' class='ui-button'>Register</a>-->
+</div>
+
+
+      <div class="col-sm-6" id="form" style="float:right;">
+          
+         
+
+
+          <form class="form-signin" action="#" method="GET"> 
+            <h2 class="form-signin-heading text-center" >Report Event</h2>
+
+            <div class="checkbox">
+                <label><input type="checkbox" class="crime" value="Rape" id="rape">Rape</label>
+            </div>
+            
+            <div class="checkbox">
+                  <label><input type="checkbox" class="crime" value="Theft/Robbery" id="Theft/Robbery">Theft/Robbery</label>
+            </div>
+            
+            <div class="checkbox disabled">
+                  <label><input type="checkbox" class="crime" value="Murder" id="Murder">Murder</label>
+            </div>
+            
+            <div class="checkbox">
+                <label><input type="checkbox" class="crime" value="Fire">Fire</label>
+            </div>
+            
+            
+            <div class="checkbox">
+                <label><input type="checkbox" class="crime" value="Raid">Raid</label>
+            </div>
+            
+
+            <div class="checkbox">
+                <label><input type="checkbox" class="crime" value="Sting">Sting</label>
+            </div>
+            
+            <br>
+
+            
+
+            <div class="form-group">
+              <label for="comment">Description:</label>
+              <textarea class="form-control" rows="5" id="comment" placeholder="Description"></textarea>
+            </div>
+              
+             <b><p>Who are you ?</p> </b>
+              <!--<div class="checkbox">
+                <label><input type="checkbox" class="person" value="Witness">Witness</label>
+            </div>
+
+              <div class="checkbox">
+                <label><input type="checkbox" class="person" value="Victim">Victim</label>
+            </div>
+            -->
+           <div class="radio">
+              <label  class='y'><input type="radio" name="optradio" value="victim">Victim</label>
+            </div>
+          <div class="radio">
+                <label class="x"><input type="radio" name="optradio" value ="witness">Witness</label>
+            </div>
+            
+            <input type="number" name="number" id="number hid" class="form-control hide" placeholder="Contact Number"  >
+            
+            <br><br>
+            <b><div id="clientId">
+             
+            </div></b>
+            <button class="btn btn-lg btn-primary btn-block" style="float:right;" type="submit" id="geolocate">Register</button>
+            
+          </div>
+                    
+
+            
+
+            
+          </form>
+    
+      </div>
+
+
+
+
+<script>
+var text = "asd";
+L.mapbox.accessToken = 'pk.eyJ1Ijoibml0aW4xMjMiLCJhIjoiNTMwZmUzNTQ1NzRkYmY4OTE1MjJkOTNhNmRlMGE4ZDYifQ.IYlLXR8kgPwt137K_x7Nzg';
+var geolocate = document.getElementById('geolocate');
+var register = document.getElementById("register");
+var map = L.mapbox.map('map', 'mapbox.streets');
+
+var myLayer = L.mapbox.featureLayer().addTo(map);
+
+// This uses the HTML5 geolocation API, which is available on
+// most mobile browsers and modern browsers, but not in Internet Explorer
+//
+// See this chart of compatibility for details:
+// http://caniuse.com/#feat=geolocation
+if (!navigator.geolocation) {
+    geolocate.innerHTML = 'Geolocation is not available';
+} else {
+    geolocate.onclick = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        map.locate();
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      document.getElementById("clientId").innerHTML = "Your id is :" + text;
+      console.log(text);
+    };
+}
+
+// Once we've got a position, zoom and center the map
+// on it, and add a single marker.
+map.on('locationfound', function(e) {
+    map.fitBounds(e.bounds);
+
+        var x = myLayer.setGeoJSON({
+        type: 'Feature',
+        geometry: {
+            type: 'Point',
+            coordinates: [e.latlng.lng, e.latlng.lat]
+        },
+        properties: {
+            'title': 'Here I am!',
+            'marker-color': '#ff8888',
+            'marker-symbol': 'star',
+            'eventId': text
+        },
+
+    });
+   
+    var locatn = {
+        type: 'Feature',
+        geometry: {
+            type: 'Point',
+            coordinates: [e.latlng.lng, e.latlng.lat]
+        },
+        properties: {
+            'title': $('.crime:checked').val(),
+            'description':$('textarea#comment').val(),
+            'marker-color': '#ff8888',
+            'marker-symbol': 'star',
+            'status':'notverified',
+            'eventId':text
+            
+        }
+
+    };
+   
+    var locatnjson = JSON.stringify(locatn);
+    // And hide the geolocation button
+    //console.log(e.latlng.lng);
+   // console.log(locatnjson);
+    geolocate.parentNode.removeChild(geolocate);
+    $.ajax({
+        type: "POST", //GET or POST or PUT or DELETE verb
+        url: "http://localhost:1337/mapdata", // Location of the service
+        data: JSON.stringify(locatn), //Data sent to server
+        contentType: "application/json; charset=utf-8", // content type sent to server
+        dataType: "json", //Expected data format from server
+        processdata: false, //True or False
+        error: function (request, error) {// When Service call fails
+            alert('Service call failed: ' + request.status + ' ' + request.statusText);
+        }
+        //contentType:"application/json"
+    });
+});
+
+// If the user chooses not to allow their location
+// to be shared, display an error message.
+map.on('locationerror', function() {
+    geolocate.innerHTML = 'Position could not be found';
+});
+
+$(document).ready(function(){
+  
+$(".x").on('change',function(){
+  
+  
+    $("input[type='number'][name='number']").addClass("hide");
+  
+});
+$(".y").on('change',function(){
+  
+    
+    $("input[type='number'][name='number']").removeClass("hide");
+  
+});
+  
+});
+
+ 
+</script>
+</body>
+</html>

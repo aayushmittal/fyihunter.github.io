@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Geolocation</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script type="text/javascript">
+  function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+      document.getElementById("id").innerHTML = "Username:" + text;
+    //console.log(text + " sfsdf");
+    
+}
+</script>
+
+
+</head>
+<body>
+<button type="text" onclick="makeid()">Generate id</button>
+<div id="id"></div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>FyiHunter || Live map</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+  .popup {
+  text-align:center;
+  }
+.popup .slideshow .image        { display:none; }
+.popup .slideshow .image.active { display:block; }
+.popup .slideshow img {
+  width:100%;
+  }
+.popup .slideshow .caption {
+  background:#eee;
+  padding:10px;
+  }
+.popup .cycle {
+  padding:10px 0 20px;
+  }
+  .popup .cycle a.prev { float:left; }
+  .popup .cycle a.next { float:right; }
+
+</style>
+</head>
+<body>
+<div id='map'>
+    
+    
+</div>
+<script>
+L.mapbox.accessToken = 'pk.eyJ1Ijoibml0aW4xMjMiLCJhIjoiNTMwZmUzNTQ1NzRkYmY4OTE1MjJkOTNhNmRlMGE4ZDYifQ.IYlLXR8kgPwt137K_x7Nzg';
+var map = L.mapbox.map('map', 'mapbox.streets')
+    .setView([ 28.6139,77.2090], 12);
+
+// As with any other AJAX request, this technique is subject to the Same Origin Policy:
+// http://en.wikipedia.org/wiki/Same_origin_policy
+var featureLayer = L.mapbox.featureLayer()
+    .loadURL('http://localhost:1337/mapdata')
+    // Once this layer loads, we set a timer to load it again in a few seconds.
+    .on('ready', run)
+    .addTo(map);
+var onetime=1;
+function run() {
+  if(onetime==1){
+    featureLayer.eachLayer(function(l) {
+        map.panTo(l.getLatLng());
+    });
+   }
+    window.setTimeout(function() {
+        featureLayer.loadURL('http://localhost:1337/mapdata');
+    }, 2000);
+onetime++;
+}
+
+</script>
+</body>
+</html>
